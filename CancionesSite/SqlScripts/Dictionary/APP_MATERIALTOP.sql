@@ -1,0 +1,31 @@
+DELETE from APP_BODYMATERIAL;
+
+
+insert INTO APP_BODYMATERIAL(name) VALUES("Abachi");
+insert INTO APP_BODYMATERIAL(name) VALUES("Alder");
+insert INTO APP_BODYMATERIAL(name) VALUES("Ash");
+insert INTO APP_BODYMATERIAL(name) VALUES("Basswood");
+insert INTO APP_BODYMATERIAL(name) VALUES("Black Limbo");
+insert INTO APP_BODYMATERIAL(name) VALUES("Canadian Laurenlian ");
+insert INTO APP_BODYMATERIAL(name) VALUES("Hardwood");
+insert INTO APP_BODYMATERIAL(name) VALUES("Kornall");
+insert INTO APP_BODYMATERIAL(name) VALUES("limpballi");
+insert INTO APP_BODYMATERIAL(name) VALUES("Mahogan");
+insert INTO APP_BODYMATERIAL(name) VALUES("Maple");
+insert INTO APP_BODYMATERIAL(name) VALUES("Maple, ");
+insert INTO APP_BODYMATERIAL(name) VALUES("Managery");
+insert INTO APP_BODYMATERIAL(name) VALUES("Maple, Poplar");
+insert INTO APP_BODYMATERIAL(name) VALUES("Meranci");
+insert INTO APP_BODYMATERIAL(name) VALUES("Nato");
+insert INTO APP_BODYMATERIAL(name) VALUES("Ny atOh");
+insert INTO APP_BODYMATERIAL(name) VALUES("Okoume");
+insert INTO APP_BODYMATERIAL(name) VALUES("I Okme ");
+insert INTO APP_BODYMATERIAL(name) VALUES("Paulomnia");
+insert INTO APP_BODYMATERIAL(name) VALUES("Pine");
+insert INTO APP_BODYMATERIAL(name) VALUES("Poplor");
+insert INTO APP_BODYMATERIAL(name) VALUES("Poplardurl");
+insert INTO APP_BODYMATERIAL(name) VALUES("Sassalras");
+insert INTO APP_BODYMATERIAL(name) VALUES("Silver Tree Maple");
+insert INTO APP_BODYMATERIAL(name) VALUES("Solid Wood");
+insert INTO APP_BODYMATERIAL(name) VALUES("sungkar");
+insert INTO APP_BODYMATERIAL(name) VALUES("Liricole");

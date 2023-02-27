@@ -1,0 +1,378 @@
+{%extends "./base.html"%} {% load static %} 
+{% load Filters%}
+{% block title%} User {% endblock %}
+{% block content %}
+<style>
+    .backGroundImage {
+      background-image: url({{"/Resource/images/bgcolor.jpg"}});
+      background-size: cover;
+    }
+    .scroll{
+      height: 50vh;
+      overflow: auto;
+    }
+    .scroll40{
+        height: 45vh;
+        overflow: auto;
+      }
+</style>
+<div class="backGroundImage p-5">
+    <div class="card container p-5" style="height: 70vh;">
+        <div class="row">
+            <div class="col-4 border-end">
+                <h3>Your Account</h3>
+                <h6 class="fw-light">{{user.first_name}} {{user.last_name}}</h6>
+                <h6 class="mb-3 fw-light">{{user.email}} </h6>
+                <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(1);">Manage Products</h4></a>
+                <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(2);">Manage Order</h4></a>
+                <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(3);">Manage Users</h4></a>
+                <a href="/logout" class="text-dark text-decoration-none  m-3"><h4>logout</h4></a>
+            </div>
+            <div class="col-8" style="height: 60vh;">
+                
+                <div id="Products" style="display: block;">
+                    <h1>Products</h1>
+                    <div id="listOfproducts" style="display: block;">
+                    <div class="scroll40">
+                    {% for product in productsList %}
+                    
+                    <div class="card m-3" >
+                        <div class="row no-gutters">
+                          <div class="col-md-4 border-end">
+                            <img src="{{product.image.url}}" class="card-img" alt="Product Image">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h3 class="card-title">{{product}}</h3>
+                              <p class="card-text">Price: {{product.price}} PLN</p>
+                             <form action="" id="edit_form" method="post">
+                              {% csrf_token %}
+                              <button type="submit" id="id_edit" class="btn btn-dark" name="edit" onclick="ProductClick(3)"  value="{{product.id}}" >Edit</button>
+                             </form>
+                              
+           
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                        <div class="m-5">
+                            <button class="btn btn-dark float-end" onclick="ProductClick(2)" >Add Product</button>
+                        </div>
+                    </div>
+                    <div id="addProduct"style="display: none;">     
+                        <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row row-cols-1 row-cols-md-1 g-2 scroll40">
+                        {% csrf_token %}
+                        {% for form in ProductsForm %}
+                            <div class="form-group py-3">
+
+                                {% if form.label == "SpecialOffer" or  form.label == "Available" %}
+                                <label class="form-label">{{form.label}}</label>
+                                {{form}}
+                                {% else %}
+                                <label class="form-label">{{form.label}}</label>
+                                {{form|addclass:"form-control"}}
+                                {%endif%}
+                            </div>
+                        
+                        {% endfor %}   
+                        </div>
+                        <div class="mt-5 row float-end w-50">
+                            <button type="button"  name="Return" class="btn btn-dark my-3 col" onclick="ProductClick(1)">Return</button>
+                            <button type="submit"  name="addProduct" class="btn btn-dark m-3 col">Add Product</button>
+                            
+                        </div>
+                        </form> 
+                    </div>
+
+                    <div id='edit' style="display: none;">
+                      <form action="" method="post" enctype="multipart/form-data">
+                        <div class="row row-cols-1 row-cols-md-1 g-2 scroll40">
+                        {% csrf_token %}
+                        {% for form in ProductsForm %}
+                            <div class="form-group py-3">
+                                
+                                {% if form.label == "SpecialOffer" or  form.label == "Available" %}
+                                <label class="form-label">{{form.label}}</label>
+                                {{form}}
+                                {% else %}
+                                <label class="form-label">{{form.label}}</label>
+                                {{form|addclass:"form-control"}}
+                                {%endif%}
+                            </div>
+                        
+                        {% endfor %}   
+                        </div>
+                        <div class="mt-5 row float-end w-50">
+                            <button type="button"  name="Return" class="btn btn-dark my-3 col" onclick="ProductClick(1)">Return</button>
+                            <button type="submit"  name="editProduct" class="btn btn-dark m-3 col" value="{{EditID}}" >Edit</button>
+                            
+                        </div>
+                        </form> 
+                    </div>
+
+                </div>
+
+
+
+
+                <div id="Order"  style="display: none;">
+                    <h1>Orders</h1>
+                    <div class="scroll">
+                      {% for item in Orders %}
+                      {% with item|dict_key:"order" as order  %}
+                      {% with item|dict_key:"product" as p  %}
+                      {% with item|dict_key:"form" as form  %}
+                      <div class="card mb-3">
+                        <div class="card-header">
+                          Order Number: {{ order.id }}
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col">
+                              <h5 class="card-title">Customer: {{ order.name}}</h5>
+                              <div class="row">
+                                <h6 class="col card-subtitle mb-2 text-muted">Placed on:</h6>
+                                <h6 class="col card-subtitle fw-light">{{order.order_place_date}}</h6>
+                              </div>
+                            </div>
+                          <div class="col ">
+                      <!-- Button trigger modal -->
+                      
+                        
+                     
+                            <div class="float-end">
+                            <form action="" method="post">
+                              {% csrf_token %}
+                              {{form}} 
+                            <button type="submit" name="save_orderStatus" class="btn btn-dark my-3 " value="{{order.id}}">
+                              Save
+                            </button> 
+                          
+                            <button type="button" class="btn btn-dark my-3 " data-bs-toggle="modal" data-bs-target="#modal_{{ order.id }}">
+                              View details
+                            </button>
+                            </form>
+                            </div>
+
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="modal_{{ order.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-xl modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content ">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Order: {{ o.id }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          
+                          {% for product in p %}
+                          <div data-index="{{product.product.id}}" class="row mb-4  mx-auto  border" style="width: 95%;">
+                            <div class="col-md-3 col-lg-2 ">
+                            </br>
+                              <img class="img-fluid mx-auto d-block" width="120px" alt="Responsive image" src="{{ product.product.image.url }}">
+                            </div>
+                            <div class="col-md-9 col-lg-10 border-start">
+                              <a href="{{ product.product.get_absolute_url }}" class="text-decoration-none text-reset">
+                                <h1 class="h5 pt-2">{{ product.product.name }}</h1>
+                              </a>
+                              <div class="">
+                                <div class="border-bottom">
+                                  <div class="row p-3">
+                                    <div class="col-6">Price :</div>
+                                    <div class="col-6 text-end"><span class="h6 fw-bold">PLN{{ product.product.price }}</span></div>
+                                  </div>
+                                </div>
+                                <div class="row p-3">
+                                <div class="col-6">Quantity :</div>
+                                <div class="col-6 text-end"><span class="h6 ">{{ product.qunatitii }}</span></div>
+                              </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                          
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+     
+                          </div>                 
+                          </div>
+
+                          <p class="card-text">
+                            Address : {{ order.addres.city }} {{ order.addres }} <br>
+                            Total: {{ order.price }} PLN<br>
+                            Status: {{ order.status }}<br>
+                            Client phone number: {{ order.phoneNumber }}
+                          </p>
+                        </div>
+
+                      </div>
+                      {% endwith %}
+                      {% endwith %}
+                      {% endwith %}
+                      {% endfor %}
+                    </div>
+
+
+                </div>
+
+                <div id="Users" style="display: none;">
+                    <h1>Users</h1>
+                    <div class="scroll">
+                      {% for user in Users %}
+                      <div class="card mb-3">
+                        <div class="card-header">
+                          User : {{ user }}
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col">
+                              <h5 class="card-title">Customer: {{ user.first_name}} {{ user.last_name}}</h5>
+                              <div class="row">
+                                <h6 class="col card-subtitle mb-2 text-muted">Start date:</h6>
+                                <h6 class="col card-subtitle fw-light">{{user.start_date}}</h6>
+                              </div>
+                            </div>
+                            {% if user.is_staff == False%}
+                          <div class="col float-end">
+                      
+                            <form action="" method="post">
+                              {% csrf_token %}
+                            <button type="submit" name="blockUser" class="btn btn-dark" value="{{user.id}}" >
+                              Block
+                            </button>
+                            <button  type="submit" name="resetPassword" class="btn btn-dark " value="{{user.id}}">
+                              Reset Password
+                            </button>
+                            <button  type="submit" name="deleteUser" class="btn btn-dark " value="{{user.id}}">
+                              Delete
+                            </button>
+                          </form>
+                          </div>     
+                          {% endif %}            
+                          </div>
+
+                          <p class="card-text">
+                            Address :{{ user.address.city }} {{ user.address }} <br>
+                            Status: {{ order.status }}
+                          </p>
+                        </div>
+
+                      </div>
+                      {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+  window.onload = function() {
+    var reloading = sessionStorage.getItem("edit");
+    if (reloading) {
+        sessionStorage.removeItem("edit");
+        productList=document.getElementById('listOfproducts');
+        productAdd=document.getElementById('addProduct');
+        edit=document.getElementById('edit');
+        productList.style.display='none';
+        productAdd.style.display='none';          
+        edit.style.display='block'; 
+        
+    }
+    
+}
+  function reloadP() {
+    sessionStorage.setItem("reloading", "true");
+    
+  }
+    function onChange(menuItem=1){
+        products=document.getElementById('Products');
+        order=document.getElementById('Order');
+        users=document.getElementById('Users');
+        
+        switch(menuItem){
+          case 1 :
+            products.style.display='block';
+            order.style.display='none';
+            users.style.display='none';
+          break;   
+          case 2 :
+            products.style.display='none';
+            order.style.display='block';
+            users.style.display='none';
+          break;  
+          case 3 :
+            products.style.display='none';
+            order.style.display='none';
+            users.style.display='block';
+          break;  
+          default:
+            products.style.display='block';
+            order.style.display='none';
+            users.style.display='none';  
+        }
+      
+      }
+
+
+   function OnEdit(){
+        sessionStorage.setItem("edit", "true");
+        document.getElementById('edit_form').submit();
+ 
+
+
+
+    }
+    function ProductClick(menuItem=1)
+    {
+      productList=document.getElementById('listOfproducts');
+      productAdd=document.getElementById('addProduct');
+      edit=document.getElementById('edit');
+      productList.style.display='none';
+      productAdd.style.display='block';
+      switch(menuItem){
+        case 1 :
+          location.href='/admin';
+          productList.style.display='block';
+          productAdd.style.display='none';
+          edit.style.display='none';
+        break;   
+        case 2 :
+          productList.style.display='none';
+          productAdd.style.display='block';
+          edit.style.display='none';
+        break;  
+        case 3 :
+          OnEdit();
+          productList.style.display='none';
+          productAdd.style.display='none'; 
+                      
+          edit.style.display='block';   
+            
+        break;  
+        default:
+          products.style.display='block';
+          order.style.display='none';
+          edit.style.display='none';  
+      }    
+      
+        
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{%extends "./base.html"%} {% load static %} {% block title%} Home {% endblock %}
+{% block content %}
+<style>
+  .gradient-custom {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+  }
+  .nested {
+    display: none;
+  }
+  
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  .active {
+    display: block;
+  }
+</style>
+<div class="gradient-custom bg-light p-5">
+  <div class="bg-light rounded-3 p-5 m-auto" >
+    <div class="row no-gutters">
+      <div class="col-6 col-md-4">
+        <div class="col-sm">
+          <div class="card ">
+            <div class="card-body">
+              <ul class=" list-group-flush">
+                {% for cat  in Categories %}
+                <li class="list-group-item">
+                  <span class="drop dropdown-toggle" >{{cat.name}}</span>                
+                  <ul class="nested list-group-flush">
+                    {% for sc in subCat %}                    
+                    {%if sc.category == cat %} 
+                      <li class="list-group-item">
+                        <a class="link-dark" href="{{sc.get_absolute_url }}"  role="button">{{sc.name}}</a>
+                      </li>
+                    {% endif %}                       
+                    {% endfor %}
+                  </ul>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-8">
+        <h1>{{categoryName}}</h1>
+
+        {%for rows in subCategories %}
+        <div class="row p-3">
+          {%for cols in rows %}
+          <div class="col-sm"><a href="{{cols.get_absolute_url }}" class="text-decoration-none text-dark"> 
+            <div class="card h-100">
+             
+              <div class="card-body">
+                <div class="row">
+                  <div class="col mt-5">
+                    <h5 class="card-title">{{cols.name}}</h5>
+                  </div>
+                  <div class="col">
+                    <img
+                      src="/Resource/{{cols.image}}"
+                      width="100"
+                      height="100"
+                    /> 
+                  </div>
+                </div>
+              </div>
+            
+            </div></a>
+          </div>
+          {%endfor%}
+        </div>
+
+        {%endfor%}
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+  <script>
+                  
+    var toggler = document.getElementsByClassName("drop");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        //this.classList.toggle("caret-down");
+    });
+    }
+  </script>
+
+  {% endblock %}
+</div>

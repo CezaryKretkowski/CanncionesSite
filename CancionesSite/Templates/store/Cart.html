@@ -1,0 +1,260 @@
+{%extends "./base.html"%} {% load static %} {% load bootstrap_icons %} 
+{% block title%} Home {% endblock %} {% load Filters%}{% block content %}
+<style>
+  .gradient-custom {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+    width: 100%;
+  }
+  .scroll{
+    height: 70%;
+    overflow: auto;
+  }
+</style>
+<div class="gradient-custom p-5 ">
+  <div class="container card " style="height: 80vh;">
+    <div class="px-3 pt-3">
+      <h1>Cart</h1>
+    </div>
+    {% if cart|length > 0 %}
+    <div class="row">
+      <div  class="col-8 p-5">
+        <h2>Products:</h2>
+        <div class="scroll" >
+        {% for item in cart %}
+        {% with product=item.product %}
+        <div data-index="{{product.id}}" class="row mb-4  mx-auto  border" style="width: 95%;">
+          <div class="col-md-3 col-lg-2 ">
+          </br>
+            <img class="img-fluid mx-auto d-block" width="120px" alt="Responsive image" src="{{ product.image.url }}">
+          </div>
+          <div class="col-md-9 col-lg-10 border-start">
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-reset">
+              <h1 class="h5 pt-2">{{ product.name }}</h1>
+            </a>
+            <div class="">
+              <div class="border-bottom">
+                <div class="row p-3">
+                  <div class="col-6">Price :</div>
+                  <div class="col-6 text-end"><span class="h6 fw-bold">PLN{{ product.price }}</span></div>
+                </div>
+              </div>
+              <div class="">
+                <div class="row p-3">
+                  <form action="" method="POST">
+                    {% csrf_token %}
+                  <div class="col-12">
+                    <label for="select">quantity</label>
+                    <input type="number" name="qt" id="qt" style="width: 10%;"  class="btn border border-dark btn-sm updata-button" value="{{item.quantity}}" data-index="{{product.id}}"/>
+                  </button>
+                    <button type="submit" name="delete-button" data-index="{{product.id}}" 
+                      class="btn btn-outline-dark btn-sm " value="{{product.id}}">
+                      Delete
+                    </button>
+                  </div>
+
+                  </form>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+        </div>
+      </div>
+      <div class="col-4 py-5">
+        <h2>Total Price:</h2>
+        <h3>{{cart.get_total_price}} PLN</h3>
+        <div class="row my-3 w-100">
+          <div class="w-50">
+            <button
+              class="btn btn-dark w-100 col"
+              id="add-button"
+              type="submit"
+              onclick="location.href='/'"
+            >
+              Continue shopping
+            </button>
+          </div>
+          <div class="w-50">
+            <button class="btn btn-dark w-100 col"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="border border-danger border-5 h-75 d-flex justify-content-center">
+    <h1 class="m-auto text-danger">Your Cart is Empty!!!</h1>
+  </div>
+  {% endif %}
+</div>
+
+
+<!--modal-->
+<div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Order Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="post"  id="IDOrder">
+          <div class="row row-cols-1 row-cols-md-2 g-2">
+          
+            {% csrf_token %}
+          {% for filed in orderForm  %}
+          <div class="form-group py-3">{{filed}}</div>
+          {% endfor %}
+          
+          <div class="form-group py-3">
+            <select name="city" class="form-control" id="city-select">
+              {% for city in cities %}
+              <option class="form-control" value="{{city.id}}">{{city.name}}</option>
+              {% endfor %}
+            </select>
+            </div>
+            <div  class="form-group py-3">
+            <input type="tel" id="phone" class="form-control" name="phone" placeholder="Phone-number" pattern="[0-9]{9}" required>
+            </div>
+          </div>
+        </form>
+
+
+          <div>
+            <h4 class="mb-3">Payment</h4>
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""  required="">
+                <label class="custom-control-label" for="credit">Credit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="blik" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="debit">Blik</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="paypal">PayPal</label>
+              </div>
+            </div>
+
+            <div id="creditCard" style="display:block">
+            <div class="row" >
+              <div class="col-md-6 mb-3">
+                <label for="cc-name">Name on card</label>
+                <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                <small class="text-muted">Full name as displayed on card</small>
+                <div class="invalid-feedback">
+                  Name on card is required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cc-number">Credit card number</label>
+                <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Credit card number is required
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="cc-expiration">Expiration</label>
+                <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Expiration date required
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="cc-cvv">CVV</label>
+                <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Security code required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="blikForm" style="display: none;">
+          <label for="">Kod Blik</label>
+          <input type="text" name="blik" id="">
+          </div>
+
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-dark" form="IDOrder" name="placeOrder" value="placeOrder">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+ 
+var input = document.getElementById('qt');
+let radios = document.getElementsByName('paymentMethod');
+
+radios[0].addEventListener('change',CardCheckbox);
+radios[1].addEventListener('change',CardCheckbox);
+radios[2].addEventListener('change',CardCheckbox);
+
+function CardCheckbox(){
+  let radios = document.getElementsByName('paymentMethod');
+  var cardDiv= document.getElementById('creditCard');
+  var blikDiv= document.getElementById('blikForm');
+
+  for ( let i=0; i< radios.length ;i++){
+    if (radios[i].checked)
+    {
+       switch(radios[i].id){
+          case 'credit':
+            cardDiv.style.display="block";
+            blikDiv.style.display="none";
+            break;
+          case 'blik':
+            cardDiv.style.display="none";
+            blikDiv.style.display="block";
+            break;
+          default:
+            cardDiv.style.display="none";
+            blikDiv.style.display="none";
+       }
+    }
+  }
+}
+input.addEventListener('input',change);
+
+
+function change() {
+    
+    const el = document.querySelector('#qt');
+    console.log(el.dataset.index)
+     $.ajax({
+      type: 'POST',
+      url: '{% url "app:Cart" %}',
+      data: {
+        productid: el.dataset.index,
+        productqty: $('#qt').val(),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: 'post'
+      },
+      success: function (json) {
+        document.location.reload(true)
+      },
+      error: function (xhr, errmsg, err) {}
+    }); 
+  } 
+
+</script>
+{% endblock %}

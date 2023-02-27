@@ -1,0 +1,6 @@
+django
+django-bootstrap-icons
+django-staff-required
+Pillow
+django-debug-toolbar
+black

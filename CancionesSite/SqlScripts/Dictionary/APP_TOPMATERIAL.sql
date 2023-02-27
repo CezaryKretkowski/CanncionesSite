@@ -1,0 +1,31 @@
+DELETE from APP_TOPMATERIAL;
+
+
+insert INTO APP_TOPMATERIAL(name) VALUES("Abachi");
+insert INTO APP_TOPMATERIAL(name) VALUES("Alder");
+insert INTO APP_TOPMATERIAL(name) VALUES("Ash");
+insert INTO APP_TOPMATERIAL(name) VALUES("Basswood");
+insert INTO APP_TOPMATERIAL(name) VALUES("Black Limbo");
+insert INTO APP_TOPMATERIAL(name) VALUES("Canadian Laurenlian ");
+insert INTO APP_TOPMATERIAL(name) VALUES("Hardwood");
+insert INTO APP_TOPMATERIAL(name) VALUES("Kornall");
+insert INTO APP_TOPMATERIAL(name) VALUES("limpballi");
+insert INTO APP_TOPMATERIAL(name) VALUES("Mahogan");
+insert INTO APP_TOPMATERIAL(name) VALUES("Maple");
+insert INTO APP_TOPMATERIAL(name) VALUES("Maple, ");
+insert INTO APP_TOPMATERIAL(name) VALUES("Managery");
+insert INTO APP_TOPMATERIAL(name) VALUES("Maple, Poplar");
+insert INTO APP_TOPMATERIAL(name) VALUES("Meranci");
+insert INTO APP_TOPMATERIAL(name) VALUES("Nato");
+insert INTO APP_TOPMATERIAL(name) VALUES("Ny atOh");
+insert INTO APP_TOPMATERIAL(name) VALUES("Okoume");
+insert INTO APP_TOPMATERIAL(name) VALUES("I Okme ");
+insert INTO APP_TOPMATERIAL(name) VALUES("Paulomnia");
+insert INTO APP_TOPMATERIAL(name) VALUES("Pine");
+insert INTO APP_TOPMATERIAL(name) VALUES("Poplor");
+insert INTO APP_TOPMATERIAL(name) VALUES("Poplardurl");
+insert INTO APP_TOPMATERIAL(name) VALUES("Sassalras");
+insert INTO APP_TOPMATERIAL(name) VALUES("Silver Tree Maple");
+insert INTO APP_TOPMATERIAL(name) VALUES("Solid Wood");
+insert INTO APP_TOPMATERIAL(name) VALUES("sungkar");
+insert INTO APP_TOPMATERIAL(name) VALUES("Liricole");

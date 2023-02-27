@@ -1,0 +1,366 @@
+{%extends "./base.html"%} {% load static %} 
+{% load Filters%}
+{% block title%} User {% endblock %}
+{% block content %}
+<style>
+  .backGroundImage {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+  }
+  .scroll{
+    height: 50vh;
+    overflow: auto;
+  }
+  .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 70px;
+    font-weight: 300;
+    color: #FFA000;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+</style>
+<div class="backGroundImage p-5">
+    <div class="card container p-5" style="height: 70vh;">
+      <div class="row">
+        <div class="col-4 border-end">
+          <h3>Your Account</h3>
+          <h6 class="fw-light">{{user.first_name}} {{user.last_name}}</h6>
+          <h6 class="mb-3 fw-light">{{user.email}} </h6>
+          {% comment %} <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(1);">Over­view</h4></a> {% endcomment %}
+          <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(1);">My Orders</h4></a>
+          <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(2);">Edit Your Account</h4></a>
+          <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(3);">Change Password</h4></a>
+          <a  class="text-dark text-decoration-none m-3" ><h4 onclick="onChange(4);">Rate products</h4></a>
+          <a href="/logout" class="text-dark text-decoration-none  m-3"><h4>logout</h4></a>
+        </div>
+        <div class="col-8" style="height: 60vh;">
+          
+
+
+
+          <div id="MyOrder"  style="display: block;">
+            <h1>My Orders</h1>
+            
+            {% if not OrderList %}
+            <div class="border p-3 m-2 border-warning" >
+              <p class="h5 text-warning">You have no order!!</p>
+            </div>
+            {% endif %}
+            <div class="scroll">
+
+              {% for order in OrderList %}
+              
+              {% with order|dict_key:"order" as o  %}
+              {% with order|dict_key:"product" as p %}
+              <div class="card mb-3">
+                <div class="card-header">
+                  Order Number: {{ o.id }}
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title">Customer: {{ o.name}}</h5>
+                      <div class="row">
+                        <h6 class="col card-subtitle mb-2 text-muted">Placed on:</h6>
+                        <h6 class="col card-subtitle fw-light">{{o.order_place_date}}</h6>
+                      </div>
+                      
+                    </div>
+                    <div class="col ">
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#modal_{{ o.id }}">
+                        View Details
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="modal_{{ o.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog  modal-xl modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content ">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Order: {{ o.id }}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              
+                              {% for product in p %}
+                              <div data-index="{{product.product.id}}" class="row mb-4  mx-auto  border" style="width: 95%;">
+                                <div class="col-md-3 col-lg-2 ">
+                                </br>
+                                  <img class="img-fluid mx-auto d-block" width="120px" alt="Responsive image" src="{{ product.product.image.url }}">
+                                </div>
+                                <div class="col-md-9 col-lg-10 border-start">
+                                  <a href="{{ product.product.get_absolute_url }}" class="text-decoration-none text-reset">
+                                    <h1 class="h5 pt-2">{{ product.product.name }}</h1>
+                                  </a>
+                                  <div class="">
+                                    <div class="border-bottom">
+                                      <div class="row p-3">
+                                        <div class="col-6">Price :</div>
+                                        <div class="col-6 text-end"><span class="h6 fw-bold">PLN{{ product.product.price }}</span></div>
+                                      </div>
+                                    </div>
+                                    <div class="row p-3">
+                                    <div class="col-6">Quantity :</div>
+                                    <div class="col-6 text-end"><span class="h6 ">{{ product.qunatitii }}</span></div>
+                                  </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {% endfor %}
+                              
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>                 
+                  </div>
+                  <p class="card-text">
+                    Total: {{ o.price }} PLN<br>
+                    Status: {{ o.status }}
+                  </p>
+                  
+                </div>
+              </div>
+              {% endwith %}
+              {% endwith %}
+              {% endfor %}
+            </div>
+
+          </div>
+
+
+          <div id="EditAccount" style="display: none;">
+            <h1>Edit Your Account</h1>
+            <form action="" id="Settings" method="post">
+              {% csrf_token %}
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+              {% for filed in regForm  %}
+              {% if filed.label != "Password" and filed.label != "Confirm password" %}
+              <div class="form-group py-3">
+                <label class="form-label">{{filed.label}}</label>
+                {{filed}}
+              </div>{% endif %}
+              {% endfor %}
+            </div>
+          </form>
+          <button type="submit" class="btn btn-dark float-end float-bottom" form="Settings" value="settings" >SaveChanges</button>
+          </div>
+
+
+          <div id="Password" class="h-100" style="display: none;">
+            <h1>Change Your Password</h1>
+            <p id="valid" class="h5 text-danger text-wrap"></p>
+            <form action="" method="post"  id='changePass'>
+            {% csrf_token %}
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+              {% for filed in regForm  %}
+              {% if filed.label == "Password" or filed.label == "Confirm password" %}
+              <div class="form-group py-3">
+                <label class="form-label">{{filed.label}}</label>
+                {{filed}}
+              </div>{% endif %}
+              {% endfor %}            
+              
+            </div>
+          </form>
+            <button type="submit" class="btn btn-dark float-end float-bottom" onclick="Validate()">Change Password</button>
+          </div>
+
+
+          <div id="ProductRating" class="h-100" style="display: none;">
+            <h1>Rate Products</h1>
+            
+            <div class="scroll">
+            
+            {% if not Userproducts %}
+            <div class="border p-3 m-2 border-warning" >
+              <p class="h5 text-warning">You have no products to review!!</p>
+            </div>
+            {% endif %}
+            {% for product in Userproducts%}
+            
+             <div data-index="{{product.id}}" class="row mb-4  mx-auto  border" style="width: 95%;">
+              <div class="col-md-3 col-lg-2 ">
+              </br>
+                <img class="img-fluid mx-auto d-block" width="120px" alt="Responsive image" src="{{ product.image.url }}">
+              </div>
+              <div class="col-md-9 col-lg-10 pb-3 border-start">
+                <a href="{{ product.product.get_absolute_url }}" class="text-decoration-none text-reset">
+                  <h1 class="h5 pt-2">{{ product.name }}</h1>
+                </a>
+                <div class="">
+                  <div class="border-bottom">
+                    <div class="row p-3">
+                      <div class="col-6">Price :</div>
+                      <div class="col-6 text-end"><span class="h6 fw-bold">PLN{{ product.price }}</span></div>
+                    </div>
+                  </div>
+                  <div class=" mt-3">
+
+                  
+
+                    <button type="button" class="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#prodmodal_{{product.id}}">
+                      Rate product
+                    </button>
+                  </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="prodmodal_{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Rate product: {{product.name}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form action="" method="post">
+                            {% csrf_token %}
+                          <div class="modal-body text-cente">
+                            <div class="rating "> 
+                              <input type="radio" name="rating" value="5" id="5">
+                              <label for="5">☆</label> 
+                              <input type="radio" name="rating" value="4" id="4">
+                              <label for="4">☆</label> 
+                              <input type="radio" name="rating" value="3" id="3">
+                              <label for="3">☆</label> 
+                              <input type="radio" name="rating" value="2" id="2">
+                              <label for="2">☆</label> 
+                              <input type="radio" name="rating" value="1" id="1" checked>
+                              <label for="1">☆</label>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                              <h4>Add your opinion</h4>
+                            </div>                            
+                            <div class="d-flex justify-content-center">
+                              <textarea  name="comment" rows="4" cols="50"></textarea>                           
+                            </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="rate" class="btn btn-dark" value="{{product.id}}">Save</button>
+                          </form>
+                          </div>
+                        </div>
+                      
+                      </div>
+                    </div>
+                  </div>
+                  
+                 
+                  
+
+                </div>
+              </div>
+            </div> 
+            {% endfor %}
+          
+          </div>
+
+
+        </div>
+      </div>
+    
+    </div>
+
+</div>
+<script>
+
+function onChange(menuItem=1){
+  overview=document.getElementById('Over­view');
+  myOrder=document.getElementById('MyOrder');
+  editAccount=document.getElementById('EditAccount');
+  password=document.getElementById('Password');
+  rating=document.getElementById('ProductRating');
+  console.log("work");
+  switch(menuItem){
+    case 1 :
+      myOrder.style.display='block';
+      editAccount.style.display='none';
+      password.style.display='none';
+      rating.style.display='none';
+    break;   
+    case 2 :
+      myOrder.style.display='none';
+      editAccount.style.display='block';
+      password.style.display='none';
+      rating.style.display='none';
+    break;  
+    case 3 :
+      myOrder.style.display='none';
+      editAccount.style.display='none';
+      password.style.display='block';
+      rating.style.display='none';
+    break;  
+    case 4 :
+      myOrder.style.display='none';
+      editAccount.style.display='none';
+      password.style.display='none';
+      rating.style.display='block';
+    break;  
+    default:
+      myOrder.style.display='block';
+      editAccount.style.display='none';
+      password.style.display='none';
+      rating.style.display='none';  
+  }
+
+}
+function Validate(){
+  password=document.getElementById('Pass').value;
+  confirm=document.getElementById('confirmPass').value;
+  console.log('work');
+  const constriant=new RegExp("(?=.*[a-z])(?=.*[A-Z]).{8,}", "");
+
+  if(constriant.test(password)&&constriant.test(confirm)){
+    if(password==confirm)
+    {
+      document.getElementById('changePass').submit();
+      
+    }
+    else{
+      document.getElementById('valid').innerHTML='The passwords are not equal';
+    }
+  }else{
+    document.getElementById('valid').innerHTML="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
+  }
+}
+function valInput(){
+  
+}
+
+</script>
+{% endblock %}

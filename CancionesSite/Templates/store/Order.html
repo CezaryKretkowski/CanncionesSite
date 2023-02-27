@@ -1,0 +1,18 @@
+{%extends "./base.html"%} {% load static %} {% load bootstrap_icons %} 
+{% block title%} Home {% endblock %} {% load Filters%}{% block content %}
+<style>
+  .gradient-custom {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+    width: 100%;
+  }
+</style>
+<div class="gradient-custom p-5 " style="height: 80vh;">
+    <div class="container card p-5 h-100" >
+    <div class="border border-success border-5 h-100  p-5">
+        <div class="w-100 d-flex" ><h1 class="m-auto text-success ">Your order has been placed</h1></div>
+        <div class="w-100 d-flex mt-3" ><button class="btn btn-dark m-auto"onclick="location.href='/'">Continue shopping</button></div>
+      </div>
+    </div>
+</div>
+{% endblock%}

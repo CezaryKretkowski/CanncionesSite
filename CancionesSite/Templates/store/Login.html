@@ -1,0 +1,35 @@
+{%extends "./base.html"%} {% load static %} 
+{% block title%} Home {% endblock %}
+{% block content %}
+<style>
+  .backGroundImage {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+  }
+</style>
+<div class="backGroundImage">
+  <div style="height: 15vh"></div>
+  <div
+    class="container bg-light p-5 rounded-3 d-flex align-items-center flex-column w-50"
+  >
+    <h1>Login</h1>    
+    {% block valid %}
+      
+    {% endblock valid %}
+    <form action="" method="post" class = "w-75" id="IDLogin">
+      {% csrf_token %}
+      {% for filed in form %}
+      <div class="form-group py-3">{{filed}}</div>
+      {% endfor %}      
+    </form>
+    <button type="submit" class="btn btn-dark my-3 w-50" name="login" value="Login" form="IDLogin">Login</button>
+    
+
+      
+    <div>
+      <a href=""></a>
+    </div>
+  </div>
+  <div style="height: 20vh"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,261 @@
+{%extends "./base.html"%} {% load static %} 
+{% load bootstrap_icons %} 
+{% load Filters%}
+{% block title%} User {% endblock %}
+{% block content %}
+<style>
+    .gradient-custom {
+      background-image: url({{"/Resource/images/bgcolor.jpg"}});
+      background-size: cover;
+      width: 100%;
+    };
+</style>
+{% load static %}
+  <script src="{% static 'color.js' %}"></script>   
+<div class="gradient-custom  p-5 d-flex justify-content-center ">
+    <div class="bg-light col-8 rounded">
+       
+        <h1 class="mx-5 mt-5 fw-bold">{{product.name}}</h1>
+        <div class="row mx-3">
+          <div class="col-6  my-3 p-3 ">
+            <div class="d-flex justify-content-center mt-5">
+            <img src="{{product.image.url}}"   height="400"/>
+            </div>
+          </div>
+          <div class="col-6 my-3">
+            <div class=" bg-light   p-5">
+              <div>
+                <h2 class="fw-bold">{{product.brand}}</h2>
+                <div class="mb-3">
+                {% for i in 5|times %} {% if i < product.rating %}
+                <i>{% bs_icon 'star-fill' size='1em'%}</i>
+                {% else%}
+                <i>{% bs_icon 'star' size='1em'%}</i>
+                {% endif %} {% endfor %}
+                </div>
+                {% if product.specialOffer == True %}
+                <h3 class="fw-light">{{product.specialPrice}} PLN</h3>
+                <h5 class="text-muted fw-light fst-italic text-decoration-line-through">
+                  {{product.price}}
+                </h5>
+                {% else %}
+                <h3 class="fw-light">{{product.price}} PLN</h3>
+                {% endif %}
+              </div>
+              <div>
+                <h4>Description:</h4>
+                <p class="text-wrap">{{product.description}}<p>
+              </div>
+              <form action="" method="post"  id="IDOrder">
+              <form action="" method="POST">
+              <div>
+                <label class="form-label">Number of items:</label>
+                <input type="Number" id="qute" name="qt" class="form-control w-50"  value="1">
+              </div>
+              
+                {% csrf_token %}
+              <div class="row my-3">            
+                <div class="w-50">
+                  <button class="btn btn-dark w-100 col" id="add-button" val={{product.id}} name="addToCart" type="submit">Add to Cart</button>
+                </div>
+                <div class="w-50">
+                  <button class="btn btn-dark w-100 col" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Buy Now</button>
+                </div>
+              </div>    
+              <label class="form-label h3">Choose the color of your guitar</label> 
+              <div>
+                
+              
+              <div class="border d-flex justify-content-center" >
+                
+                <img src="/Resource/images/guitar.png" id="img" height="200">
+                
+              </div>  
+              <input type="color" id="color" style="width: 100%;" onchange="onChangeColor('color')">  
+              {% for form in  Form %}
+              {% if form.label == "Color" %}           
+              {{form}}
+              {% endif %}
+              
+              {% endfor %}
+           </div>
+           
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3>Specification:</h3>
+          <table class="table table-striped mt-4">
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Brand</td>
+                <td>{{product.brand}}</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Model</td>
+                <td>{{product.name}}</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Type</td>
+                <td>{{product.subCategory}}</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Rating</td>
+                <td>
+                  {% for i in 5|times %} {% if i < product.rating %}
+                  <i>{% bs_icon 'star-fill' size='1em'%}</i>
+                  {% else%}
+                  <i>{% bs_icon 'star' size='1em'%}</i>
+                  {% endif %} {% endfor %}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Top Material</td>
+                
+                <td>
+                    {% for form in Form %}    
+                    {% if form.label == "TopMaterial" %}
+                    {{form}}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Body Material</td>
+                <td>
+                    {% for form in Form %}    
+                    {% if form.label == "BodyMaterial" %}
+                    {{form}}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Pickups</td>
+                <td>
+                    {% for form in Form %}    
+                    {% if form.label == "Pickups" %}
+                    {{form}}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+              </form>
+              </tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+    
+    <!--modal-->
+    <div>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Order Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              
+              <div class="row row-cols-1 row-cols-md-2 g-2">
+              
+                {% csrf_token %}
+              {% for filed in orderForm  %}
+              <div class="form-group py-3">{{filed}}</div>
+              {% endfor %}
+              
+              <div class="form-group py-3">
+                <select name="city" class="form-control" id="city-select">
+                  {% for city in cities %}
+                  <option class="form-control" value="{{city.id}}">{{city.name}}</option>
+                  {% endfor %}
+                </select>
+                </div>
+                <div  class="form-group py-3">
+                <input type="tel" id="phone" class="form-control" name="phone" placeholder="Phone-number" pattern="[0-9]{9}" required>
+                </div>
+              </div>
+
+            </form>
+    
+    
+              <div>
+                <h4 class="mb-3">Payment</h4>
+                <div class="d-block my-3">
+                  <div class="custom-control custom-radio">
+                    <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""  required="">
+                    <label class="custom-control-label" for="credit">Credit card</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input id="blik" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                    <label class="custom-control-label" for="debit">Blik</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                    <label class="custom-control-label" for="paypal">PayPal</label>
+                  </div>
+                </div>
+    
+                <div id="creditCard" style="display:block">
+                <div class="row" >
+                  <div class="col-md-6 mb-3">
+                    <label for="cc-name">Name on card</label>
+                    <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+                    <small class="text-muted">Full name as displayed on card</small>
+                    <div class="invalid-feedback">
+                      Name on card is required
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="cc-number">Credit card number</label>
+                    <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                    <div class="invalid-feedback">
+                      Credit card number is required
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-3">
+                    <label for="cc-expiration">Expiration</label>
+                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+                    <div class="invalid-feedback">
+                      Expiration date required
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="cc-cvv">CVV</label>
+                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                    <div class="invalid-feedback">
+                      Security code required
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              <div id="blikForm" style="display: none;">
+              <label for="">Kod Blik</label>
+              <input type="text" name="blik" id="">
+              </div>
+    
+              </div>
+    
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-dark" form="IDOrder" name="placeOrder" value="placeOrder">Place Order</button>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{%extends "./base.html"%} {% load static %} {% block title%} Home {% endblock %}
+{% block content %}
+<style>
+  .backGroundImage {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+  }
+</style>
+<div class="backGroundImage">
+  <div style="height: 15vh"></div>
+  <div
+    class="container bg-light p-5 rounded-3 d-flex align-items-center flex-column w-50"
+  >
+    <h1>Register</h1>
+    <form action="" method="post" class = "w-75" id="IDRegistrtion">
+    {% csrf_token %}
+    {% for filed in regForm  %}
+    <div class="form-group py-3">
+      <label class="form-label">{{filed.label}}</label>
+      {{filed}}
+    </div>
+    {% endfor %}
+
+    <div class="form-group py-3">
+    <label class="form-label">City</label>
+    <select name="city" class="form-control" id="city-select">
+      {% for city in cities %}
+      <option class="form-control" value="{{city.id}}">{{city.name}}</option>
+      {% endfor %}
+    </select>
+    </div>
+    </form>
+    <button type="submit" class="btn btn-dark my-3 w-50" name="create_account" value="Create_account" form="IDRegistrtion">Create account</button>
+  </div>
+  <div style="height: 20vh"></div>
+</div>
+
+
+{% comment %} <section class="bg-image gradient-custom">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-md-9">
+        <div class="card bg-light">
+          <div class="card-body p-5 text-center">
+            <p class="h1 text-uppercase">Create an account</p>
+            <div class="container col-md-12">
+              <form class="justify-content-center">
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="floatingInput0"
+                    placeholder="Adam"
+                  />
+                  <label for="floatingInput0">First name</label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="floatingInput1"
+                    placeholder="name@example.com"
+                  />
+                  <label for="floatingInput1">Last name</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="floatingInput2"
+                    placeholder="Email address"
+                  />
+                  <label for="floatingInput3">Email address</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="tekst"
+                    class="form-control"
+                    id="floatingInput4"
+                    placeholder="Street + Nr"
+                  />
+                  <label for="floatingInput4">Street + Nr</label>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-floating">
+                      <input
+                        type="tekst"
+                        class="form-control"
+                        id="floatingInput5"
+                        placeholder="Zip Code"
+                      />
+                      <label for="floatingInput5">Zip Code</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-floating">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="floatingInput6"
+                        placeholder="Flat Number"
+                      />
+                      <label for="floatingInput6">Flat Number</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="floatingInput7"
+                    placeholder="Phone number"
+                  />
+                  <label for="floatingInput7">Phone number</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="floatingInput8"
+                    placeholder="Password"
+                  />
+                  <label for="floatingInput8">Password</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="floatingInput8"
+                    placeholder="Password"
+                  />
+                  <label for="floatingInput8">Repeat your password</label>
+                </div>
+
+                <div class="form-check d-flex justify-content-center mb-5">
+                  <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    value=""
+                    id="form2Example3cg"
+                  />
+                  <label class="form-check-label" for="form2Example3g">
+                    I agree all statements in
+                    <a href="#!" class="text-body"><u>Terms of service</u></a>
+                  </label>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button type="button" class="btn w-100 text-white btn-dark">
+                    Register
+                  </button>
+                </div>
+
+                <p class="text-center text-muted mt-5 mb-0">
+                  Have already an account?
+                  <a href="#!" class="fw-bold text-body"><u>Login here</u></a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> {% endcomment %}
+{% endblock %}

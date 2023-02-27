@@ -1,0 +1,19 @@
+DELETE from APP_PICKUPS;
+
+
+
+insert INTO APP_PICKUPS(name) VALUES("H");
+insert INTO APP_PICKUPS(name) VALUES("HH");
+insert INTO APP_PICKUPS(name) VALUES("HHH");
+insert INTO APP_PICKUPS(name) VALUES("H,P90");
+insert INTO APP_PICKUPS(name) VALUES("HH,Pizeo");
+insert INTO APP_PICKUPS(name) VALUES("HP");
+insert INTO APP_PICKUPS(name) VALUES("HS");
+insert INTO APP_PICKUPS(name) VALUES("HSS");
+insert INTO APP_PICKUPS(name) VALUES("P90");
+insert INTO APP_PICKUPS(name) VALUES("P90,H");
+insert INTO APP_PICKUPS(name) VALUES("P90,P90");
+insert INTO APP_PICKUPS(name) VALUES("P90,P90,P90");
+insert INTO APP_PICKUPS(name) VALUES("S");
+insert INTO APP_PICKUPS(name) VALUES("SH");
+insert INTO APP_PICKUPS(name) VALUES("SS");

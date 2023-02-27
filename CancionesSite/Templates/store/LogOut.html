@@ -1,0 +1,21 @@
+{%extends './base.html'%}  
+{% block content %}
+<style>
+  .backGroundImage {
+    background-image: url({{"/Resource/images/bgcolor.jpg"}});
+    background-size: cover;
+  }
+</style>
+<div class="backGroundImage">
+  <div style="height: 20vh"></div>
+  <div
+    class="container bg-light p-5 rounded-3 d-flex align-items-center flex-column w-50 " style="height: 33vh"
+  >
+    <h1>Log Out</h1>    
+    <div class="border p-3 m-2 border-success" >
+      <p class="h5 text-success">Log Out Succesfuly!</p>
+    </div>
+  </div>
+  <div style="height: 20vh"></div>
+</div>
+{% endblock %}
